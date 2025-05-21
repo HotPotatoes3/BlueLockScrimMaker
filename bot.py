@@ -97,23 +97,28 @@ def run_discord_bot(discord):
             return reaction_check(reaction, user)
 
         async def collect_reactions():
-            try:
-                while not reaction_end.is_set():
-                    reaction, user = await bot.wait_for("reaction_add", timeout=wait_seconds, check=reaction_check)
+            while not reaction_end.is_set():
+                try:
+                    reaction, user = await bot.wait_for("reaction_add", timeout=1, check=reaction_check)
                     reacted_users.add(user)
-            except asyncio.TimeoutError:
-                reaction_end.set()
+                except asyncio.TimeoutError:
+                    continue
 
         async def remove_reactions():
-            try:
-                while not reaction_end.is_set():
-                    reaction, user = await bot.wait_for("reaction_remove", timeout=wait_seconds, check=reaction_remove_check)
+            while not reaction_end.is_set():
+                try:
+                    reaction, user = await bot.wait_for("reaction_remove", timeout=1, check=reaction_remove_check)
                     reacted_users.discard(user)
-            except asyncio.TimeoutError:
-                pass
+                except asyncio.TimeoutError:
+                    continue
 
-        # Step 4: Run collectors in parallel
-        await asyncio.gather(collect_reactions(), remove_reactions())
+        # Run collectors and wait for the total time
+        collect_task = asyncio.create_task(collect_reactions())
+        remove_task = asyncio.create_task(remove_reactions())
+        await asyncio.sleep(wait_seconds)
+        reaction_end.set()
+        await asyncio.gather(collect_task, remove_task)
+
 
         # Step 5: Form teams
         players = list(reacted_users)
@@ -146,10 +151,12 @@ def run_discord_bot(discord):
         if subs:
             result_embed.add_field(name="Substitutes 🪑", value="\n".join(user.mention for user in subs), inline=False)
 
-        result_embed.set_image(url="https://cdn.discordapp.com/attachments/1373052932655939734/1374236632986943558/blgif-ezgif.com-crop.gif?ex=682f4b59&is=682df9d9&hm=a8ebf9968d99c2d2fdc42594c27873a0895c9493e383e6ae461d65915996573b&")
         result_embed.set_footer(text="Good luck, have fun!")
 
-        await ctx.send(embed=result_embed)
+        await ctx.send(
+            content="https://cdn.discordapp.com/attachments/1373052932655939734/1374236632986943558/blgif-ezgif.com-crop.gif",
+            embed=result_embed
+        )
 
         # Step 6: DM everyone the link
         for user in team1 + team2 + subs:

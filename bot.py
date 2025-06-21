@@ -214,13 +214,13 @@ def run_discord_bot(discord):
     async def help(ctx):
         embed = discord.Embed(
             title="🎮 Scrim Bot Help",
-            description="Here's how to host a random scrim using the bot:",
+            description="Here's how to use the bot to host scrims and interact with the AI features:",
             color=discord.Color.green()
         )
 
         embed.add_field(
-            name="📌 Command",
-            value="%hostRandomScrim [minutes]`",
+            name="📌 Scrim Command",
+            value="`!hostRandomScrim [minutes]` - Starts a random scrim sign-up.",
             inline=False
         )
 
@@ -254,6 +254,24 @@ def run_discord_bot(discord):
         embed.add_field(
             name="📬 DM Delivery",
             value="All participants will receive the host’s link in their DMs when the teams are announced.",
+            inline=False
+        )
+
+        embed.add_field(
+            name="🚫 restrictAI",
+            value="Restricts the bot from responding with AI messages in the current channel. Requires `Manage Channels` permission.",
+            inline=False
+        )
+
+        embed.add_field(
+            name="✅ unrestrictAI",
+            value="Allows the bot to resume AI responses in the current channel. Requires `Manage Channels` permission.",
+            inline=False
+        )
+
+        embed.add_field(
+            name="💡 AI Interaction",
+            value="The bot may respond with AI-generated messages if you reply to its messages, ping it, or DM it.",
             inline=False
         )
 

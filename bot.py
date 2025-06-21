@@ -220,13 +220,13 @@ def run_discord_bot(discord):
 
         embed.add_field(
             name="📌 Scrim Command",
-            value="`!hostRandomScrim [minutes]` - Starts a random scrim sign-up.",
+            value="`%hostRandomScrim [minutes]` - Starts a random scrim sign-up.",
             inline=False
         )
 
         embed.add_field(
             name="🕒 Time Limit",
-            value="Sets how long (in minutes) players have to react with ✅ to join. Example: `!hostRandomScrim 5` waits for 5 minutes.",
+            value="Sets how long (in minutes) players have to react with ✅ to join. Example: `%hostRandomScrim 5` waits for 5 minutes.",
             inline=False
         )
 
@@ -258,14 +258,14 @@ def run_discord_bot(discord):
         )
 
         embed.add_field(
-            name="🚫 restrictAI",
-            value="Restricts the bot from responding with AI messages in the current channel. Requires `Manage Channels` permission.",
+            name="🚫 Restrict AI",
+            value="`%restrictAI` - Restricts the bot from responding with AI messages in the current channel. Requires `Manage Channels` permission.",
             inline=False
         )
 
         embed.add_field(
-            name="✅ unrestrictAI",
-            value="Allows the bot to resume AI responses in the current channel. Requires `Manage Channels` permission.",
+            name="✅ Unrestrict AI",
+            value="`%unrestrictAI` - Allows the bot to resume AI responses in the current channel. Requires `Manage Channels` permission.",
             inline=False
         )
 

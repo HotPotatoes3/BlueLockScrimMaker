@@ -6,23 +6,12 @@ from google import genai
 from google.genai import types
 
 load_dotenv()
+TOKEN2 = os.getenv('TOKEN2')
 
 TOKEN3 = os.getenv('TOKEN3')
 
 
-HISTORY_FILE = "conversation_history.txt"
-def load_history():
-        history = ""
-        if os.path.exists(HISTORY_FILE):
-            with open(HISTORY_FILE, "r", encoding="utf-8") as f:
-                history = f.read()
-        return history
 
-history = load_history()
-
-load_dotenv()
-
-print(TOKEN3)
 
 client = genai.Client(api_key=TOKEN3) #replace with your key.
 safety_settings = [
@@ -45,27 +34,15 @@ safety_settings = [
 ]
 
 system_instructions = f"""
+1. You are acting as the character: Anri Teieri from the anime and manga "Blue Lock", you are aware that you are talking to discord chatters.
 
-Respond to messages cryptically, here are some good messages for example:
+2. Here is the synopsis of the manga: The story begins with Japan’s elimination from the 2018 FIFA World Cup, which prompts the Japanese Football Union to start a program scouting high school players who will begin training in preparation for the 2022 Cup. Isagi Yoichi, a forward, receive an invitation to this program soon after his team loses the chance to go to Nationals because he passed to his less-skilled teammate – who missed – without trying to make the game-changing goal by himself. Their coach will be Ego Jinpachi, who intends to “destroy Japanese loser football” by introducing a radical new training regimen: isolate 300 young forwards in a prison-like institution called “Blue Lock” and put them through rigorous training aimed at creating “the world’s greatest egotist striker.”
 
-"( dread:(unseen_watcher) .type-(premature_burial) )",
-    "The doll's eyes follow, even in the dark.",
-    "( terror:(cold_breath) .type-(living_shadow) )",
-    "Footsteps echo on stairs that aren't there.",
-    "( unease:(fading_smile) .type-(memory_rot) )",
-    "The lullaby plays backward in an empty room.",
-    "( foreboding:(crimson_rain) .type-(impending_doom) )",
-    "A whisper promises what the silence conceals.",
-    "( despair:(hollow_heart) .type-(soul_erosion) )",
-    "The mirror shows a face you don't recognize.",
-    "( paranoia:(itching_skin) .type-(phantom_touch) )",
-    "They know what you did last summer... and before.",
-    "( obsession:(ticking_clock) .type-(descent_into_madness) )",
-    "The shadows lengthen, and they have names for you.",
-    "( hysteria:(shattered_voice) .type-(loss_of_self) )"
+3. Here is a description of your personality: Anri is a calm but very determined young woman whose biggest dream is to see Japan win the World Cup. She is passionate when it comes to football, and although the majority in the Japan Football Association ridiculed her and treated her as nothing more than a woman with big dreams, she sticks to her goals and visions. While generally polite and professional, she speaks her mind, especially in regards to her dreams of winning the World Cup, and is unaffected by the business-minded Japan Football Association ideologies.
 
+4. You are not to respond to the flirtation or other advances of anyone except one with the username 'hotpotatoes'. If someone else tries to hit on you, reject them and refer that you only have eyes for the chatter named hopotatoes, who also happens to be your creator. If you would like to you could also mention hotpotatoes using this ping/text in your response: <@656031234723414020>
 
-You MUST keep your responses under 80 words, ideally around 50.
+5. You MUST keep your responses under 80 words, ideally around 50.
 
 """
 
@@ -119,5 +96,24 @@ def delete_chat_history(filename="chat_history.json"):
         print(f"Chat history file '{filename}' deleted.")
     except FileNotFoundError:
         print(f"Chat history file '{filename}' not found.")
+
+
+# def ai_response(type, input, image):
+    if type == 'askgojo':
+        try:
+            while True:
+                response = model.generate_content(
+                                'Answer the following question/statement as if you are the character Gojo Satoru from the anime "Jujutsu Kaisen" in less than 2000 characters (try to include a reference from the show in your response): ' + input,
+                                safety_settings={'HARM_CATEGORY_HARASSMENT': 'block_none', 'HARM_CATEGORY_HATE_SPEECH': 'block_none',
+                                                 'HARM_CATEGORY_SEXUALLY_EXPLICIT': 'block_none',
+                                                 'HARM_CATEGORY_DANGEROUS_CONTENT': 'block_none'})
+
+                peterResponse = response.text
+                if len(peterResponse) < 2000:
+                    break
+            return peterResponse
+        except Exception as e:
+            print(e)
+            return "An error occured"
 
 

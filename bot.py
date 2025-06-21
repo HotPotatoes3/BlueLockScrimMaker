@@ -28,11 +28,22 @@ def run_discord_bot(discord):
             synced = await bot.tree.sync()
         except Exception as e:
             print(e)
+        
+        check_inactive_channels.start()
 
         
-
-
+    global chat
+    chat = responses.create_chat()
     
+    @tasks.loop(minutes=20)
+    async def check_inactive_channels():
+        now = datetime.now(timezone.utc)
+        for guild_id, last_message_time in monitored_guilds.items():
+            if now - last_message_time > timedelta(minutes=120):
+                global chat
+                chat = responses.create_chat()
+
+    monitored_guilds = {}
 
 
     @bot.event
@@ -46,7 +57,22 @@ def run_discord_bot(discord):
 
             print(f"{username} said: '{user_message}' ({channel})")
             
-            await bot.process_commands(message)
+            if user_message[0] != '%':
+                if bot.user in message.mentions:
+                    resp = chat.send_message(f"Respond relevantly to this chat message from a chatter,{username}, talking to you (<@1374806045276508291> is your ping, ignore it and avoid using it in your message): {user_message}").text
+                    await message.reply(resp)
+                elif message.reference is not None:
+                    replied_message = await message.channel.fetch_message(message.reference.message_id)
+                    if replied_message.author == bot.user:
+                        resp = chat.send_message(f"Respond relevantly to this chat message from a chatter, {username}, talking to you): {user_message}").text
+                        await message.reply(resp)
+                elif message.guild is None:
+                    resp = chat.send_message(f"Respond relevantly to this chat message (it's a dm to you): {user_message}").text
+                    await message.author.send(resp)
+            else:
+                await bot.process_commands(message)
+                
+        monitored_guilds[message.guild.id] = datetime.now(timezone.utc)
                 
 
     @bot.command()
@@ -178,7 +204,7 @@ def run_discord_bot(discord):
 
         embed.add_field(
             name="📌 Command",
-            value="`$hostRandomScrim [minutes]`",
+            value="%hostRandomScrim [minutes]`",
             inline=False
         )
 

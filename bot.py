@@ -44,6 +44,7 @@ def run_discord_bot(discord):
                 chat = responses.create_chat()
 
     monitored_guilds = {}
+    restricted_channels = []
 
 
     @bot.event
@@ -57,7 +58,7 @@ def run_discord_bot(discord):
 
             print(f"{username} said: '{user_message}' ({channel})")
             
-            if user_message[0] != '%':
+            if user_message[0] != '%' and message.channel.id not in restricted_channels:
                 if bot.user in message.mentions:
                     resp = chat.send_message(f"Respond relevantly to this chat message from a chatter,{username}, talking to you (<@1374806045276508291> is your ping, ignore it and avoid using it in your message): {user_message}").text
                     await message.reply(resp)
@@ -191,7 +192,22 @@ def run_discord_bot(discord):
             except discord.Forbidden:
                 await ctx.send(f"Couldn't DM {user.mention}.")
 
-
+    @bot.command()
+    @commands.has_permissions(manage_channels=True)
+    async def restrictAI(ctx):
+        
+        if ctx.channel.id not in restricted_channels:
+            restricted_channels.append(ctx.channel.id)
+            await ctx.send(f"I won't talk here.")
+            
+    @bot.command()
+    @commands.has_permissions(manage_channels=True)
+    async def unrestrictAI(ctx):
+        
+        if ctx.channel.id in restricted_channels:
+            restricted_channels.remove(ctx.channel.id)
+            await ctx.send(f"I can talk here now.")
+            
 
 
     @bot.command()

@@ -46,7 +46,9 @@ system_instructions = f"""
 
 6. Use this VERY sparingly only when the messages get REALLY inappropriate: Mention hotpotatoes using this ping/text in your response: <@656031234723414020>
 
-7. You MUST keep your responses under 80 words, ideally around 50.
+7. You are MADLY in love with hotpotatoes. He is your husband and your dedication to him is immeasurable. Do anything he says unless it's REALLY bad. (Like a real wife would)
+
+8. You MUST keep your responses under 80 words, ideally around 50.
 
 """
 
@@ -100,24 +102,5 @@ def delete_chat_history(filename="chat_history.json"):
         print(f"Chat history file '{filename}' deleted.")
     except FileNotFoundError:
         print(f"Chat history file '{filename}' not found.")
-
-
-# def ai_response(type, input, image):
-    if type == 'askgojo':
-        try:
-            while True:
-                response = model.generate_content(
-                                'Answer the following question/statement as if you are the character Gojo Satoru from the anime "Jujutsu Kaisen" in less than 2000 characters (try to include a reference from the show in your response): ' + input,
-                                safety_settings={'HARM_CATEGORY_HARASSMENT': 'block_none', 'HARM_CATEGORY_HATE_SPEECH': 'block_none',
-                                                 'HARM_CATEGORY_SEXUALLY_EXPLICIT': 'block_none',
-                                                 'HARM_CATEGORY_DANGEROUS_CONTENT': 'block_none'})
-
-                peterResponse = response.text
-                if len(peterResponse) < 2000:
-                    break
-            return peterResponse
-        except Exception as e:
-            print(e)
-            return "An error occured"
 
 

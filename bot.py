@@ -37,7 +37,7 @@ def run_discord_bot(discord):
 
     gay_gifs = ["https://tenor.com/view/girl-anime-kiss-i-love-you-gif-2024647334029262493", "https://tenor.com/view/sono-hanabira-ni-kuchizuke-wo-anime-yuri-kiss-gif-19434907", "https://tenor.com/view/wow-gif-25687305", "https://tenor.com/view/yuri-gif-24238090", "https://tenor.com/view/bloom-into-you-yagate-kimi-ni-naru-yuri-kiss-gif-21637575", "https://tenor.com/view/neighbors-gif-7743851900177201494", "https://tenor.com/view/anime-girl-hug-lesbians-anime-lesbian-anime-girl-anime-girl-kiss-gif-10007048051271758348"]
 
-    @tasks.loop(minutes=0.01)
+    @tasks.loop(minutes=2)
     async def gay_loop():
         for i in gay_channels:
             rand = random.randint(1, 100)

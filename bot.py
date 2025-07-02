@@ -18,6 +18,7 @@ def run_discord_bot(discord):
     app_commands = discord.app_commands
     bot = commands.Bot(command_prefix="%", intents=discord.Intents.all())
     bot.remove_command("help")
+    
     connection = sqlite3.connect("mydata.db")
     cursor = connection.cursor()
 
@@ -236,9 +237,6 @@ def run_discord_bot(discord):
             restricted_channels.remove(ctx.channel.id)
             await ctx.send(f"I can talk here now.")
             
-
-    @bot.command()
-    
     
     
 
@@ -288,6 +286,7 @@ def run_discord_bot(discord):
             value="All participants will receive the host’s link in their DMs when the teams are announced.",
             inline=False
         )
+        
         embed.add_field(
                 name="👩‍❤️‍💋‍👩 Lesbian Mode",
                 value="`%lesbomode` - Makes channel lesbian. Requires `Manage Channels` permission.",

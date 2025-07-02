@@ -88,20 +88,23 @@ def run_discord_bot(discord):
             
             if user_message[0] != '%' and message.channel.id not in restricted_channels:
                 if bot.user in message.mentions:
-                    resp = chat.send_message(f"Respond relevantly to this chat message from a chatter,{username}, talking to you (<@1374806045276508291> is your ping, ignore it and avoid using it in your message): {user_message}").text
+                    monitored_guilds[message.guild.id] = datetime.now(timezone.utc)
+                    resp = chat.send_message(f"Respond relevantly to this chat message from a chatter,{username}, (you can also refer to them by {message.author.mention}), talking to you (<@1374806045276508291> is your ping, ignore it and avoid using it in your message): {user_message}").text
                     await message.reply(resp)
                 elif message.reference is not None:
                     replied_message = await message.channel.fetch_message(message.reference.message_id)
                     if replied_message.author == bot.user:
-                        resp = chat.send_message(f"Respond relevantly to this chat message from a chatter, {username}, talking to you): {user_message}").text
+                        monitored_guilds[message.guild.id] = datetime.now(timezone.utc)
+                        resp = chat.send_message(f"Respond relevantly to this chat message from a chatter, {username}, (you can also refer to them by {message.author.mention}), talking to you): {user_message}").text
                         await message.reply(resp)
                 elif message.guild is None:
+                    monitored_guilds[message.guild.id] = datetime.now(timezone.utc)
                     resp = chat.send_message(f"Respond relevantly to this chat message (it's a dm to you): {user_message}").text
                     await message.author.send(resp)
             else:
                 await bot.process_commands(message)
                 
-        monitored_guilds[message.guild.id] = datetime.now(timezone.utc)
+        
                 
 
     @bot.command()

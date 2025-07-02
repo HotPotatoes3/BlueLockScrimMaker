@@ -30,7 +30,34 @@ def run_discord_bot(discord):
             print(e)
         
         check_inactive_channels.start()
+        gay_loop.start()
 
+
+
+    gay_gifs = ["https://tenor.com/view/girl-anime-kiss-i-love-you-gif-2024647334029262493", "https://tenor.com/view/sono-hanabira-ni-kuchizuke-wo-anime-yuri-kiss-gif-19434907", "https://tenor.com/view/wow-gif-25687305", "https://tenor.com/view/yuri-gif-24238090", "https://tenor.com/view/bloom-into-you-yagate-kimi-ni-naru-yuri-kiss-gif-21637575", "https://tenor.com/view/neighbors-gif-7743851900177201494", "https://tenor.com/view/anime-girl-hug-lesbians-anime-lesbian-anime-girl-anime-girl-kiss-gif-10007048051271758348"]
+
+    @tasks.loop(minutes=0.01)
+    async def gay_loop():
+        for i in gay_channels:
+            rand = random.randint(1, 100)
+            print (rand)
+            if rand <= 8:
+                channel = bot.get_channel(i)
+                await channel.send(random.choice(gay_gifs))
+    
+    
+    @bot.command()
+    @commands.has_permissions(manage_channels=True)
+    async def lesbomode(ctx):
+        
+        if ctx.channel.id not in gay_channels:
+            gay_channels.append(ctx.channel.id)
+            await ctx.send(f"This channel is now LESBIAN")
+        else:
+            gay_channels.remove(ctx.channel.id)
+            await ctx.send(f"This channel is STRAIGHT 🥀")
+    
+    
         
     global chat
     chat = responses.create_chat()
@@ -45,7 +72,7 @@ def run_discord_bot(discord):
 
     monitored_guilds = {}
     restricted_channels = []
-
+    gay_channels = []
 
     @bot.event
     async def on_message(message):
@@ -180,8 +207,8 @@ def run_discord_bot(discord):
 
         result_embed.set_footer(text="Good luck, have fun!")
 
+        await ctx.send("https://cdn.discordapp.com/attachments/1373052932655939734/1374236632986943558/blgif-ezgif.com-crop.gif")
         await ctx.send(
-            content="https://cdn.discordapp.com/attachments/1373052932655939734/1374236632986943558/blgif-ezgif.com-crop.gif",
             embed=result_embed
         )
 
@@ -189,6 +216,7 @@ def run_discord_bot(discord):
         for user in team1 + team2 + subs:
             try:
                 await user.send(f"You were added to a team! Here's the link from the host:\n{shared_link}")
+                
             except discord.Forbidden:
                 await ctx.send(f"Couldn't DM {user.mention}.")
 
@@ -209,6 +237,10 @@ def run_discord_bot(discord):
             await ctx.send(f"I can talk here now.")
             
 
+    @bot.command()
+    
+    
+    
 
     @bot.command()
     async def help(ctx):
@@ -256,7 +288,12 @@ def run_discord_bot(discord):
             value="All participants will receive the host’s link in their DMs when the teams are announced.",
             inline=False
         )
-
+        embed.add_field(
+                name="👩‍❤️‍💋‍👩 Lesbian Mode",
+                value="`%lesbomode` - Makes channel lesbian. Requires `Manage Channels` permission.",
+                inline=False
+            )
+        
         embed.add_field(
             name="🚫 Restrict AI",
             value="`%restrictAI` - Restricts the bot from responding with AI messages in the current channel. Requires `Manage Channels` permission.",
@@ -277,7 +314,6 @@ def run_discord_bot(discord):
 
         embed.set_footer(text="Questions? Contact a server admin or the bot dev.")
         await ctx.send(embed=embed)
-
 
     
     bot.run(TOKEN)

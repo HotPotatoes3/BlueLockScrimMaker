@@ -211,7 +211,7 @@ def run_discord_bot(discord):
 
         result_embed.set_footer(text="Good luck, have fun!")
 
-        await ctx.send("https://cdn.discordapp.com/attachments/1373052932655939734/1374236632986943558/blgif-ezgif.com-crop.gif")
+        await ctx.send("https://cdn.discordapp.com/attachments/1374829412368777248/1430711754802987098/tumblr_a85bbfec8d57f2bc5e1f3589aa6fe367_3eb5cadf_640.gif?ex=68fac5a7&is=68f97427&hm=64ed43c4b1652db3b92eb1498829ee7998c3591c5e5874e08f78c35a6cc1b2ff&")
         await ctx.send(
             embed=result_embed
         )
@@ -220,6 +220,10 @@ def run_discord_bot(discord):
         for user in team1 + team2 + subs:
             try:
                 await user.send(f"You were added to a team! Here's the link from the host:\n{shared_link}")
+                if user in team1:
+                    await user.send("You are starting in the Home Team 🔵")
+                if user in team2:
+                    await user.send("You are starting in the Away Team ⚪")
                 
             except discord.Forbidden:
                 await ctx.send(f"Couldn't DM {user.mention}.")
